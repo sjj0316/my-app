@@ -1,14 +1,12 @@
 import {useState,useEffect} from 'react';
 import { Box, Center,SimpleGrid,Flex, Text } from '@chakra-ui/react'
-import { getData } from '../../api/getData';
-
+import {getData} from "../../api/getData"
+import { useQuery } from '@tanstack/react-query';
 function MainComponent() {
-    const [data, setData] = useState([])
-    useEffect(() => {
-        getData().then((res) =>{
-            setData(res.data);
-        })
-    }, [])
+    const {data, isLoading, error} = 
+    useQuery(["wear"],()=>getData(),{initialData:{data:[]}})
+    console.log(data)
+
   return (
     <>
         <Center>
@@ -17,33 +15,36 @@ function MainComponent() {
              >
                 <Text margin={"0 auto"} 
                 lineHeight={"10vh"} fontSize={"2xl"}
-                >신사무 랭킹</Text>
+                >무신사 랭킹</Text>
                <SimpleGrid 
                bg={"#eee"}
                columns={1} 
                spacingY={5} 
                padding={5}>
-                {data.map((item, index) => {
-                    return( <Box height='100px'  border="1px"> 
                 
-                    <Text>[72시간특가]남성 보크 플라워 폴로 반소매 티셔츠 - 블랙 / FC65PO0024PU99J</Text>
+                {
+                data.data.map((item,index)=>{
+                    return(<Box height='100px'  border="1px"> 
+                    <Text>{item[3]}</Text>
                     <Flex 
                     marginTop={3}
                     height={"60px"} 
                     flexDir={"row"} 
                     justifyContent={"space-between"}>
-                        <Text>145,000원</Text> 
+                        <Text>{item[4]}</Text> 
                         <Text w={"70px"} 
-                        textAlign={"center"}>상의</Text>
+                        textAlign={"center"}>{item[7]}</Text>
                     </Flex>
                 </Box>)
-                })}
-               
+                })
+                }
+                
                 </SimpleGrid> 
             </Flex>
         </Center>
     </>
   );
 }
+
 
 export default MainComponent;
