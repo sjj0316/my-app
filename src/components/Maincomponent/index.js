@@ -1,50 +1,32 @@
-import {useState,useEffect} from 'react';
-import { Box, Center,SimpleGrid,Flex, Text } from '@chakra-ui/react'
-import {getData} from "../../api/getData"
-import { useQuery } from '@tanstack/react-query';
+import { useState, useEffect } from "react";
+import { Box, Center, SimpleGrid, Flex, Text } from "@chakra-ui/react";
+import { getData } from "../../api/getData";
+import { getDataAll } from "../../api/getDataAll";
+import { useQuery } from "@tanstack/react-query";
+import { CardComponent} from "../CardComponent/index";
+
 function MainComponent() {
-    const {data, isLoading, error} = 
-    useQuery(["wear"],()=>getData(),{initialData:{data:[]}})
-    console.log(data)
+  const { data, isLoading, error } = useQuery(["wear"], () => getDataAll(), {
+    initialData: { data: [] },
+  });
+  console.log(data);
 
   return (
     <>
-        <Center>
-            <Flex w={"40vh"} h={"100vh"} 
-            flexDir={"column"}
-             >
-                <Text margin={"0 auto"} 
-                lineHeight={"10vh"} fontSize={"2xl"}
-                >무신사 랭킹</Text>
-               <SimpleGrid 
-               bg={"#eee"}
-               columns={1} 
-               spacingY={5} 
-               padding={5}>
-                
-                {
-                data.data.map((item,index)=>{
-                    return(<Box height='100px'  border="1px"> 
-                    <Text>{item[3]}</Text>
-                    <Flex 
-                    marginTop={3}
-                    height={"60px"} 
-                    flexDir={"row"} 
-                    justifyContent={"space-between"}>
-                        <Text>{item[4]}</Text> 
-                        <Text w={"70px"} 
-                        textAlign={"center"}>{item[7]}</Text>
-                    </Flex>
-                </Box>)
-                })
-                }
-                
-                </SimpleGrid> 
-            </Flex>
-        </Center>
+      <Center>
+        <Flex w={"70vw"} h={"100vh"} flexDir={"column"}>
+          <Text margin={"0 auto"} lineHeight={"10vh"} fontSize={"2xl"}>
+            신사무 랭킹
+          </Text>
+          <Flex>
+            <CardComponent data={data.data} type={"상의"}/>
+            <CardComponent data={data.data} type={"바지"}/>
+            <CardComponent data={data.data} type={"아우터"}/>
+          </Flex>
+        </Flex>
+      </Center>
     </>
   );
 }
-
 
 export default MainComponent;
